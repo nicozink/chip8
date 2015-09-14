@@ -7,6 +7,9 @@ All rights reserved.
 
 // Local Includes
 #include "main.h"
+#include "display.h"
+#include "input.h"
+#include "system_state.h"
 
 // Project Includes
 
@@ -16,5 +19,16 @@ All rights reserved.
 // Runs the main program.
 int run()
 {
+  SystemState state;
+  
+  Display display;
+  Input input;
+  
+  while (state.is_running)
+  {
+    input.Process(state);
+    display.Refresh(state);
+  }
+  
   return 0;
 }
