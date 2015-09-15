@@ -21,14 +21,20 @@ Renderer::Renderer()
 
 void Renderer::DrawScreen(const SystemState& state)
 {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClearColor(0, 0, 0, 0.5);
+  glLoadIdentity();
+
+  CheckGLError();
+  
   for (int x = 0; x < Globals::NUM_PIXELS; ++x)
   {
     if (state.display[x])
     {
-      const int row = x / Globals::DISPLAY_COLUMNS;
-      const int column = x % Globals::DISPLAY_ROWS;
+      const int row = SystemState::GetDisplayRow(x);
+      const int column = SystemState::GetDisplayCol(x);
       
-      DrawQuad(row, column, row + 1, column + 1);
+      DrawQuad(row, column);
     }
   }
 }
@@ -45,9 +51,14 @@ void Renderer::CheckGLError()
   }
 }
 
-void Renderer::DrawQuad(float x1, float y1, float x2, float y2)
+void Renderer::DrawQuad(int r, int c)
 {
-  glColor3f(0.0, 0.0, 0.0);
+  double x1 = GetScreenX(c);
+  double y1 = GetScreenY(r);
+  double x2 = GetScreenX(c + 1);
+  double y2 = GetScreenY(r + 1);
+  
+  glColor3f(1.0, 1.0, 1.0);
   
   glBegin(GL_QUADS);
   
@@ -59,4 +70,14 @@ void Renderer::DrawQuad(float x1, float y1, float x2, float y2)
   glEnd();
 
   CheckGLError();
+}
+
+double Renderer::GetScreenX(int c)
+{
+  return (double)c / (double)(Globals::DISPLAY_COLUMNS) * 2.0 - 1.0;
+}
+
+double Renderer::GetScreenY(int r)
+{
+  return (double)r / (double)(Globals::DISPLAY_ROWS) * 2.0 - 1.0;
 }

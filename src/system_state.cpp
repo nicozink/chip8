@@ -16,9 +16,19 @@ SystemState::SystemState()
 {
   delay_timer = 0;
   
-  for (int i = 0; i < Globals::NUM_PIXELS; ++i)
+  for (int i = 0; i < Globals::DISPLAY_ROWS; ++i)
   {
-    display[i] = 0;
+    for (int j = 0; j < Globals::DISPLAY_COLUMNS; ++j)
+    {
+      if ((i + j % 2) % 2 == 0)
+      {
+        display[GetDisplayIndex(i, j)] = true;
+      }
+      else
+      {
+        display[GetDisplayIndex(i, j)] = false;
+      }
+    }
   }
   
   is_running = true;
@@ -43,4 +53,19 @@ SystemState::SystemState()
   });
   
   stack_pointer = 0;
+}
+
+int SystemState::GetDisplayRow(int i)
+{
+  return i / Globals::DISPLAY_COLUMNS;
+}
+
+int SystemState::GetDisplayCol(int i)
+{
+  return i % Globals::DISPLAY_COLUMNS;
+}
+
+int SystemState::GetDisplayIndex(int r, int c)
+{
+  return r * Globals::DISPLAY_COLUMNS + c;
 }

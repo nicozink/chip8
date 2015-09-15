@@ -28,7 +28,11 @@ class Renderer
   
     void CheckGLError();
     
-    void DrawQuad(float x1, float y1, float x2, float y2);
+    double GetScreenX(int c);
+    
+    double GetScreenY(int r);
+    
+    void DrawQuad(int r, int c);
 };
 
 #endif

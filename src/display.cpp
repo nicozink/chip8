@@ -74,4 +74,6 @@ Display::Display()
 void Display::Refresh(const SystemState& state)
 {
   renderer.DrawScreen(state);
+  
+  SDL_GL_SwapBuffers();
 }
