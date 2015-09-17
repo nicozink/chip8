@@ -3,12 +3,21 @@ Copyright © Nico Zink
 All rights reserved.
 */
 
-#include "system_state.h" 
+#include "program_controller.h" 
 
 // Local Includes
+#include "system_state.h"
 
 // Project Includes
 
 // External Includes
 
-// This is a struct defined in the header file.
+ProgramController::ProgramController()
+{
+  
+}
+
+void ProgramController::Step(SystemState& state)
+{
+  
+}

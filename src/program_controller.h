@@ -3,35 +3,26 @@ Copyright © Nico Zink
 All rights reserved.
 */
 
-#ifndef MEMORY_H
-#define MEMORY_H
+#ifndef PROGRAM_CONTROLLER_H
+#define PROGRAM_CONTROLLER_H
 
 // Local Includes
 
 // Project Includes
 
 // External Includes
-#include <array>
-#include <stdint.h>
 
-// A class which represents the state of the system for the chip 8 virtual machine.
-struct SystemState
+// Required classes
+class SystemState;
+
+// A class which handles execution of the game.
+class ProgramController
 {
   public:
   
-    uint8_t delay_timer;
+    ProgramController();
     
-    std::array<uint8_t, 4095> memory;
-    
-    uint16_t program_counter;
-    
-    std::array<uint8_t, 16> registers;
-    
-    uint8_t sound_timer;
-    
-    std::array<uint16_t, 16> stack;
-    
-    uint8_t stack_pointer;
+    void Step(SystemState& system_state);
 };
 
 #endif

@@ -55,6 +55,7 @@ set(SRC_MAIN
   ${CMAKE_CURRENT_SOURCE_DIR}/src/display.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/input.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/program_controller.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system_state.cpp
 )

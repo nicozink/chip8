@@ -9,6 +9,7 @@ All rights reserved.
 #include "main.h"
 #include "display.h"
 #include "input.h"
+#include "program_controller.h"
 #include "system_state.h"
 
 // Project Includes
@@ -21,12 +22,14 @@ int run()
 {
   SystemState state;
   
+  ProgramController controller;
   Display display;
   Input input;
   
   while (state.is_running)
   {
     input.Process(state);
+    controller.Step(state);
     display.Refresh(state);
   }
   
