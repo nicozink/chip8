@@ -38,7 +38,7 @@ SystemState::SystemState()
     byte = 0;
   });
   
-  program_counter = 0;
+  program_counter = Globals::PROGRAM_OFFSET;
   
   std::for_each(registers.begin(), registers.end(), [](uint8_t &byte)
   {

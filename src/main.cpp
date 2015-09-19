@@ -19,7 +19,7 @@ All rights reserved.
 // @returns The success code.
 int main(int argc, char** argv)
 {
-  if (argc >= 2)
+  if (argc == 2)
   {
     std::string param(argv[1]);
     
@@ -27,10 +27,14 @@ int main(int argc, char** argv)
     {
       std::cout << "0.0.0.0" << std::endl;
     }
+    else
+    {
+      return run(param);
+    }
   }
   else
-  {      
-    return run();
+  {
+    std::cout << "Error - please select a ROM to run." << std::endl;
   }
   
   return 0;

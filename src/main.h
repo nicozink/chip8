@@ -6,6 +6,9 @@ All rights reserved.
 #ifndef MAIN_H
 #define MAIN_H
 
+// System includes
+#include <string>
+
 // Main method which initialises the program.
 // @param argc The number of arguments.
 // @param argv The arguments.
@@ -13,7 +16,8 @@ All rights reserved.
 int main(int argc, char** argv);
 
 // Runs the main program.
-int run();
+// @param rom_location The file location of the ROM to run.
+int run(std::string param);
 
 #endif
 

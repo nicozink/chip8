@@ -8,6 +8,7 @@ All rights reserved.
 // Local Includes
 #include "main.h"
 #include "display.h"
+#include "file_system.h"
 #include "input.h"
 #include "program_controller.h"
 #include "system_state.h"
@@ -16,11 +17,19 @@ All rights reserved.
 
 // External Includes
 #include <iostream>
+#include <string>
 
 // Runs the main program.
-int run()
+int run(std::string rom_location)
 {
   SystemState state;
+ 
+  FileSystem file_system;
+  
+  if (!file_system.LoadRom(state, rom_location))
+  {
+    std::cout << "Unable to load the ROM." << std::endl;
+  }
   
   ProgramController controller;
   Display display;

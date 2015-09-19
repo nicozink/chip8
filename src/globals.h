@@ -24,6 +24,8 @@ struct Globals
     static constexpr int NUM_PIXELS = DISPLAY_ROWS * DISPLAY_COLUMNS;
     
     static constexpr int MEM_SIZE = 4095;
+    
+    static constexpr int PROGRAM_OFFSET = 0x200;
 };
 
 #endif
