@@ -51,6 +51,7 @@ set(CMAKE_CXX_FLAGS "-DDEBUG -g -Wall -O0 -std=c++0x")
 endif()
 
 set(SRC_MAIN
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/bit_utils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/chip8_emulator.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/display.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/file_system.cpp

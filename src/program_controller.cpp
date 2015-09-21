@@ -6,6 +6,7 @@ All rights reserved.
 #include "program_controller.h" 
 
 // Local Includes
+#include "bit_utils.h"
 #include "system_state.h"
 
 // Project Includes
@@ -244,7 +245,7 @@ void ProgramController::Opcode_00EE(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_1NNN(SystemState& state, uint16_t command)
 {
-  state.program_counter = command & 0x0FFF;
+  state.program_counter = BitUtils<uint16_t>::GetHexValue<0x0FFF>(command);
 }
 
 // Calls subroutine at NNN.
@@ -261,8 +262,17 @@ void ProgramController::Opcode_2NNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_3XNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_index = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = BitUtils<uint16_t>::GetHexValue<0x00FF>(command);
+  
+  if (state.registers[register_index] == value)
+  {
+    state.program_counter += 4;
+  }
+  else
+  {
+    state.program_counter += 2;
+  }
 }
 
 // Skips the next instruction if VX doesn't equal NN.
