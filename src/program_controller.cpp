@@ -280,8 +280,17 @@ void ProgramController::Opcode_3XNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_4XNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_index = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = BitUtils<uint16_t>::GetHexValue<0x00FF>(command);
+  
+  if (state.registers[register_index] != value)
+  {
+    state.program_counter += 4;
+  }
+  else
+  {
+    state.program_counter += 2;
+  }
 }
 
 // Skips the next instruction if VX equals VY.
@@ -289,8 +298,17 @@ void ProgramController::Opcode_4XNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_5XY0(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+  
+  if (state.registers[register_x] == state.registers[register_y])
+  {
+    state.program_counter += 4;
+  }
+  else
+  {
+    state.program_counter += 2;
+  }
 }
 
 // Sets VX to NN.
@@ -298,8 +316,12 @@ void ProgramController::Opcode_5XY0(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_6XNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_index = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = BitUtils<uint16_t>::GetHexValue<0x00FF>(command);
+  
+  state.registers[register_index] = value;
+  
+  state.program_counter += 2;
 }
 
 // Adds NN to VX.
