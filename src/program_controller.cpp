@@ -236,7 +236,7 @@ void ProgramController::Opcode_00E0(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_00EE(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -253,7 +253,7 @@ void ProgramController::Opcode_1NNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_2NNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -329,8 +329,12 @@ void ProgramController::Opcode_6XNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_7XNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_index = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = BitUtils<uint16_t>::GetHexValue<0x00FF>(command);
+  
+  state.registers[register_index] += value;
+  
+  state.program_counter += 2;
 }
 
 // Sets VX to the value of VY.
@@ -338,8 +342,12 @@ void ProgramController::Opcode_7XNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY0(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
-  exit(0);
+	uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+	uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+
+	state.registers[register_x] = state.registers[register_y];
+	
+	state.program_counter += 2;
 }
 
 // Sets VX to VX or VY.
@@ -347,7 +355,7 @@ void ProgramController::Opcode_8XY0(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY1(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -356,7 +364,7 @@ void ProgramController::Opcode_8XY1(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY2(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -365,7 +373,7 @@ void ProgramController::Opcode_8XY2(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY3(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -374,7 +382,7 @@ void ProgramController::Opcode_8XY3(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY4(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -383,7 +391,7 @@ void ProgramController::Opcode_8XY4(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY5(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -392,7 +400,7 @@ void ProgramController::Opcode_8XY5(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY6(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -401,7 +409,7 @@ void ProgramController::Opcode_8XY6(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY7(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -410,7 +418,7 @@ void ProgramController::Opcode_8XY7(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XYE(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -419,7 +427,7 @@ void ProgramController::Opcode_8XYE(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_9XY0(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -428,7 +436,7 @@ void ProgramController::Opcode_9XY0(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_ANNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -437,7 +445,7 @@ void ProgramController::Opcode_ANNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_BNNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -446,7 +454,7 @@ void ProgramController::Opcode_BNNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_CXNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -458,7 +466,7 @@ void ProgramController::Opcode_CXNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_DXYN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -467,7 +475,7 @@ void ProgramController::Opcode_DXYN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_EX9E(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -476,7 +484,7 @@ void ProgramController::Opcode_EX9E(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_EXA1(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -485,7 +493,7 @@ void ProgramController::Opcode_EXA1(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX07(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -494,7 +502,7 @@ void ProgramController::Opcode_FX07(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX0A(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -503,7 +511,7 @@ void ProgramController::Opcode_FX0A(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX15(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -512,7 +520,7 @@ void ProgramController::Opcode_FX15(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX18(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -521,7 +529,7 @@ void ProgramController::Opcode_FX18(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX1E(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -530,7 +538,7 @@ void ProgramController::Opcode_FX1E(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX29(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -541,7 +549,7 @@ void ProgramController::Opcode_FX29(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX33(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -550,7 +558,7 @@ void ProgramController::Opcode_FX33(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX55(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }
 
@@ -559,6 +567,6 @@ void ProgramController::Opcode_FX55(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX65(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << command << " not implemented." << std::endl;
+  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
   exit(0);
 }

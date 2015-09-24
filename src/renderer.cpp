@@ -6,11 +6,16 @@ All rights reserved.
 #include "renderer.h" 
 
 // Local Includes
+#include "system.h"
 #include "system_state.h"
 
 // Project Includes
 
 // External Includes
+#if OPERATING_SYSTEM == WINDOWS
+#include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <iostream>
 

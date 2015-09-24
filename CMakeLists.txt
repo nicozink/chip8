@@ -59,6 +59,7 @@ set(SRC_MAIN
   ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/program_controller.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/system.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system_state.cpp
 )
 
@@ -91,7 +92,14 @@ else (OPENGL_FOUND)
   MESSAGE("OpenGL environment missing")
 endif (OPENGL_FOUND)
 
+# Output the version to the Version.h file.
+configure_file (
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/system.h.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/src/system.h"
+)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
