@@ -355,8 +355,12 @@ void ProgramController::Opcode_8XY0(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY1(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+  
+  state.registers[register_x] |= state.registers[register_y];
+  
+  state.program_counter += 2;
 }
 
 // Sets VX to VX and VY.
@@ -364,8 +368,12 @@ void ProgramController::Opcode_8XY1(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY2(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+	uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+	uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+
+	state.registers[register_x] &= state.registers[register_y];
+
+	state.program_counter += 2;
 }
 
 // Sets VX to VX xor VY.
