@@ -22,8 +22,68 @@ class BitUtils
   public:
   
     template<int TBitMask>
+    static inline bool GetBitValue(TValueType value);
+    
+    template<int TBitMask>
     static inline TValueType GetHexValue(TValueType value);
 };
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b10000000>(uint8_t value)
+{
+  return (value & 0b10000000) >> 7;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b01000000>(uint8_t value)
+{
+  return (value & 0b01000000) >> 6;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b00100000>(uint8_t value)
+{
+  return (value & 0b00100000) >> 5;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b00010000>(uint8_t value)
+{
+  return (value & 0b00010000) >> 4;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b00001000>(uint8_t value)
+{
+  return (value & 0b00001000) >> 3;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b00000100>(uint8_t value)
+{
+  return (value & 0b00000100) >> 2;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b00000010>(uint8_t value)
+{
+  return (value & 0b00000010) >> 1;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint8_t>::GetBitValue<0b00000001>(uint8_t value)
+{
+  uint8_t result = value & 0b00000001;
+  return result;
+}
 
 template<>
 template<>

@@ -17,7 +17,7 @@ All rights reserved.
 
 ProgramController::ProgramController()
 {
-  
+
 }
 
 void ProgramController::Step(SystemState& state)
@@ -474,8 +474,31 @@ void ProgramController::Opcode_CXNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_DXYN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value_x = state.registers[register_x];
+  
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+  uint16_t value_y = state.registers[register_y];
+  
+  uint16_t value_n = BitUtils<uint16_t>::GetHexValue<0x000F>(command);
+  
+  state.registers[0xF] = 0;
+  
+  for (int r = value_y; r < value_y + value_n; r++)
+  {
+    uint8_t row = state.memory[state.address + r];
+    
+    state.registers[0xF] |= UpdateDisplayBit<0b10000000>(state, r, value_x, row);
+    state.registers[0xF] |= UpdateDisplayBit<0b01000000>(state, r, value_x + 1, row);
+    state.registers[0xF] |= UpdateDisplayBit<0b00100000>(state, r, value_x + 2, row);
+    state.registers[0xF] |= UpdateDisplayBit<0b00010000>(state, r, value_x + 3, row);
+    state.registers[0xF] |= UpdateDisplayBit<0b00001000>(state, r, value_x + 4, row);
+    state.registers[0xF] |= UpdateDisplayBit<0b00000100>(state, r, value_x + 5, row);
+    state.registers[0xF] |= UpdateDisplayBit<0b00000010>(state, r, value_x + 6, row);
+    state.registers[0xF] |= UpdateDisplayBit<0b00000001>(state, r, value_x + 7, row);
+  }
+
+  state.program_counter += 2;
 }
 
 // Skips the next instruction if the key stored in VX is pressed.
@@ -546,8 +569,12 @@ void ProgramController::Opcode_FX1E(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX29(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = state.registers[register_x];
+  
+  state.address = Globals::FONT_OFFSET + value * Globals::FONT_SIZE;
+
+  state.program_counter += 2;
 }
 
 // Stores the Binary-coded decimal representation of VX, with the most significant of three digits at the address in I, the middle

@@ -27,6 +27,8 @@ struct SystemState
     static int GetDisplayCol(int i);
     static int GetDisplayIndex(int r, int c);
     
+    uint16_t address;
+    
     uint8_t delay_timer;
     
     std::bitset<Globals::NUM_PIXELS> display;

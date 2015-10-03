@@ -55,6 +55,7 @@ set(SRC_MAIN
   ${CMAKE_CURRENT_SOURCE_DIR}/src/chip8_emulator.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/display.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/file_system.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/font.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/input.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/program_controller.cpp

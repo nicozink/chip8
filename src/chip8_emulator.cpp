@@ -9,6 +9,7 @@ All rights reserved.
 #include "main.h"
 #include "display.h"
 #include "file_system.h"
+#include "font.h"
 #include "input.h"
 #include "program_controller.h"
 #include "system_state.h"
@@ -24,6 +25,9 @@ int run(std::string rom_location)
 {
   SystemState state;
  
+  Font font;
+  font.Load(state);
+  
   FileSystem file_system;
   
   if (!file_system.LoadRom(state, rom_location))

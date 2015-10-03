@@ -7,11 +7,13 @@ All rights reserved.
 #define PROGRAM_CONTROLLER_H
 
 // Local Includes
-#include <stdint.h>
+#include "bit_utils.h"
+#include "system_state.h"
 
 // Project Includes
 
 // External Includes
+#include <stdint.h>
 
 // Required classes
 class SystemState;
@@ -96,6 +98,23 @@ class ProgramController
     void Opcode_FX55(SystemState& state, uint16_t command);
 
     void Opcode_FX65(SystemState& state, uint16_t command);
+    
+    template <int TBitMask>
+    inline uint8_t UpdateDisplayBit(SystemState& state, int row, int col, uint8_t data)
+    {
+      bool value = BitUtils<uint8_t>::GetBitValue<TBitMask>(data);
+      
+      if (value)
+      {
+        int i = SystemState::GetDisplayIndex(row % Globals::DISPLAY_ROWS, col % Globals::DISPLAY_COLUMNS);
+
+        state.display[i] = value ^ state.display[i];
+
+        return !(state.display[i] & value);
+      }
+      
+      return false;
+    }
 };
 
 #endif
