@@ -17,7 +17,7 @@ All rights reserved.
 
 ProgramController::ProgramController()
 {
-
+  rng.seed(std::random_device()());
 }
 
 void ProgramController::Step(SystemState& state)
@@ -236,8 +236,9 @@ void ProgramController::Opcode_00E0(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_00EE(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  --state.stack_pointer;
+
+  state.program_counter = state.stack[state.stack_pointer] + 2;
 }
 
 // Jumps to address NNN.
@@ -253,8 +254,11 @@ void ProgramController::Opcode_1NNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_2NNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  state.stack[state.stack_pointer] = state.program_counter;
+
+  ++state.stack_pointer;
+
+  state.program_counter = BitUtils<uint16_t>::GetHexValue<0x0FFF>(command);
 }
 
 // Skips the next instruction if VX equals NN.
@@ -381,8 +385,12 @@ void ProgramController::Opcode_8XY2(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY3(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+
+  state.registers[register_x] ^= state.registers[register_y];
+
+  state.program_counter += 2;
 }
 
 // Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there isn't.
@@ -390,8 +398,23 @@ void ProgramController::Opcode_8XY3(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY4(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+
+  uint32_t result = state.registers[register_x] + state.registers[register_y];
+
+  if (result & 0xFFFF0000)
+  {
+    state.registers[0xF] = 1;
+  }
+  else
+  {
+    state.registers[0xF] = 0;
+  }
+
+  state.registers[register_x] = result & 0x0000FFFF;
+
+  state.program_counter += 2;
 }
 
 // VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't.
@@ -399,8 +422,23 @@ void ProgramController::Opcode_8XY4(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY5(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+
+  uint32_t result = state.registers[register_x] - state.registers[register_y];
+
+  if (result & 0xFFFF0000)
+  {
+    state.registers[0xF] = 0;
+  }
+  else
+  {
+    state.registers[0xF] = 1;
+  }
+
+  state.registers[register_x] = result & 0x0000FFFF;
+
+  state.program_counter += 2;
 }
 
 // Shifts VX right by one. VF is set to the value of the least significant bit of VX before the shift.[2]
@@ -408,8 +446,14 @@ void ProgramController::Opcode_8XY5(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY6(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = state.registers[register_x];
+
+  state.registers[0xF] = BitUtils<uint16_t>::GetBitValue<0b0000000000000001>(command);
+
+  state.registers[register_x] = value >> 1;
+
+  state.program_counter += 2;
 }
 
 // Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't.
@@ -417,8 +461,23 @@ void ProgramController::Opcode_8XY6(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XY7(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+
+  uint32_t result = state.registers[register_y] - state.registers[register_x];
+
+  if (result & 0xFFFF0000)
+  {
+    state.registers[0xF] = 0;
+  }
+  else
+  {
+    state.registers[0xF] = 1;
+  }
+
+  state.registers[register_x] = result & 0x0000FFFF;
+
+  state.program_counter += 2;
 }
 
 // Shifts VX left by one. VF is set to the value of the most significant bit of VX before the shift.[2]
@@ -426,8 +485,14 @@ void ProgramController::Opcode_8XY7(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_8XYE(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = state.registers[register_x];
+
+  state.registers[0xF] = BitUtils<uint16_t>::GetBitValue<0b1000000000000000>(command);
+
+  state.registers[register_x] = value << 1;
+
+  state.program_counter += 2;
 }
 
 // Skips the next instruction if VX doesn't equal VY.
@@ -435,8 +500,17 @@ void ProgramController::Opcode_8XYE(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_9XY0(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
+
+  if (state.registers[register_x] != state.registers[register_y])
+  {
+    state.program_counter += 4;
+  }
+  else
+  {
+    state.program_counter += 2;
+  }
 }
 
 // Sets I to the address NNN.
@@ -444,8 +518,11 @@ void ProgramController::Opcode_9XY0(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_ANNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t value = BitUtils<uint16_t>::GetHexValue<0x0FFF>(command);
+
+  state.address = value;
+
+  state.program_counter += 2;
 }
 
 // Jumps to the address NNN plus V0.
@@ -453,8 +530,7 @@ void ProgramController::Opcode_ANNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_BNNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  state.program_counter = BitUtils<uint16_t>::GetHexValue<0x0FFF>(command) + state.registers[0x0];
 }
 
 // Sets VX to the result of a bitwise and operation on a random number and NN.
@@ -462,8 +538,14 @@ void ProgramController::Opcode_BNNN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_CXNN(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value_n = BitUtils<uint16_t>::GetHexValue<0x00FF>(command);
+
+  std::uniform_int_distribution<> dis(0, 0xFF);
+
+  state.registers[register_x] = dis(rng) & value_n;
+
+  state.program_counter += 2;
 }
 
 // Sprites stored in memory at location in index register (I), 8bits wide. Wraps around the screen. If when drawn, clears a
@@ -524,8 +606,11 @@ void ProgramController::Opcode_EXA1(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX07(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+
+  state.registers[register_x] = state.delay_timer;
+
+  state.program_counter += 2;
 }
 
 // A key press is awaited, and then stored in VX.
@@ -542,8 +627,11 @@ void ProgramController::Opcode_FX0A(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX15(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  
+  state.delay_timer = state.registers[register_x];
+
+  state.program_counter += 2;
 }
 
 // Sets the sound timer to VX.
@@ -551,8 +639,11 @@ void ProgramController::Opcode_FX15(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX18(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+
+  state.sound_timer = state.registers[register_x];
+
+  state.program_counter += 2;
 }
 
 // Adds VX to I.[3]

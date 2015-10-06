@@ -13,6 +13,7 @@ All rights reserved.
 // Project Includes
 
 // External Includes
+#include <random>
 #include <stdint.h>
 
 // Required classes
@@ -115,6 +116,8 @@ class ProgramController
       
       return false;
     }
+
+    std::mt19937 rng;
 };
 
 #endif

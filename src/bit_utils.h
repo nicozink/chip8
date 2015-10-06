@@ -87,6 +87,20 @@ inline bool BitUtils<uint8_t>::GetBitValue<0b00000001>(uint8_t value)
 
 template<>
 template<>
+inline bool BitUtils<uint16_t>::GetBitValue<0b1000000000000000>(uint16_t value)
+{
+  return (value & 0b1000000000000000) >> 15;
+}
+
+template<>
+template<>
+inline bool BitUtils<uint16_t>::GetBitValue<0b0000000000000001>(uint16_t value)
+{
+  return value & 0b0000000000000001;
+}
+
+template<>
+template<>
 inline uint16_t BitUtils<uint16_t>::GetHexValue<0xF000>(uint16_t value)
 {
   return (value & 0xF000) >> 12;
