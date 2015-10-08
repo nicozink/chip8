@@ -12,7 +12,9 @@ All rights reserved.
 #include "font.h"
 #include "input.h"
 #include "program_controller.h"
+#include "sound.h"
 #include "system_state.h"
+#include "timers.h"
 
 // Project Includes
 
@@ -38,11 +40,17 @@ int run(std::string rom_location)
   ProgramController controller;
   Display display;
   Input input;
-  
+  Timers timers;
+  Sound sound;
+
   while (state.is_running)
   {
     input.Process(state);
+    timers.Count(state);
+
     controller.Step(state);
+    
+    sound.Update(state);
     display.Refresh(state);
   }
   

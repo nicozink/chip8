@@ -60,8 +60,10 @@ set(SRC_MAIN
   ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/program_controller.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/sound.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system_state.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/timers.cpp
 )
 
 if (${OPERATING_SYSTEM} EQUAL ${WINDOWS_ENUM})

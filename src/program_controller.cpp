@@ -651,8 +651,22 @@ void ProgramController::Opcode_FX18(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX1E(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+
+  uint32_t result = state.address + state.registers[register_x];
+
+  if (result & 0xFFFF0000)
+  {
+    state.registers[0xF] = 1;
+  }
+  else
+  {
+    state.registers[0xF] = 0;
+  }
+
+  state.address = result & 0x0000FFFF;
+
+  state.program_counter += 2;
 }
 
 // Sets I to the location of the sprite for the character in VX. Characters 0-F (in hexadecimal) are represented by a 4x5 font.
@@ -675,8 +689,12 @@ void ProgramController::Opcode_FX29(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX33(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = state.registers[register_x];
+
+  state.memory[state.address] = value / 100;
+  state.memory[state.address + 1] = value / 10 % 10;
+  state.memory[state.address + 2] = value % 10;
 }
 
 // Stores V0 to VX in memory starting at address I.
@@ -684,8 +702,21 @@ void ProgramController::Opcode_FX33(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX55(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = state.registers[register_x];
+
+  for (int i = 0; i < value; ++i)
+  {
+    uint16_t register_value = state.registers[i];
+
+    uint8_t register_front = BitUtils<uint16_t>::GetHexValue<0xFF00>(register_value);
+    uint8_t register_back = BitUtils<uint16_t>::GetHexValue<0x00FF>(register_value);
+
+    state.memory[state.address + i * 2] = register_front;
+    state.memory[state.address + i * 2 + 1] = register_back;
+  }
+
+  state.program_counter += 2;
 }
 
 // Fills V0 to VX with values from memory starting at address I.
@@ -693,6 +724,18 @@ void ProgramController::Opcode_FX55(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX65(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+  uint16_t value = state.registers[register_x];
+
+  for (int i = 0; i < value; ++i)
+  {
+    uint8_t memory_front = state.memory[state.address + i * 2];
+    uint8_t memory_back = state.memory[state.address + i * 2 + 1];
+
+    uint16_t memory_value = memory_front << 8 | memory_back;
+
+    state.registers[i] = memory_value;
+  }
+
+  state.program_counter += 2;
 }
