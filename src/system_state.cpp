@@ -40,8 +40,6 @@ SystemState::SystemState()
     byte = 0;
   });
   
-  play_sound = false;
-
   program_counter = Globals::PROGRAM_OFFSET;
   
   std::for_each(registers.begin(), registers.end(), [](uint8_t &byte)

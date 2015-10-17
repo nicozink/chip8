@@ -11,6 +11,7 @@ All rights reserved.
 // Project Includes
 
 // External Includes
+#include <stdint.h>
 
 // Required classes
 class SystemState;
@@ -23,7 +24,13 @@ class Sound
     Sound();
     ~Sound();
 
+    void GenerateSamples(uint8_t *stream, int length);
     void Update(SystemState& state);
+
+  private:
+
+    int beep_samples_left;
+    int beep_current_v;
 };
 
 #endif

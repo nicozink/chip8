@@ -24,14 +24,4 @@ void Timers::Count(SystemState& state)
   {
     --state.delay_timer;
   }
-
-  if (state.sound_timer > 0)
-  {
-    --state.sound_timer;
-
-    if (state.sound_timer == 0)
-    {
-      state.play_sound = true;
-    }
-  }
 }

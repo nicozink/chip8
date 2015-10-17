@@ -45,7 +45,7 @@ endif (MSVC)
 
 # Set user specified flags.
 if (MSVC)
-set(CMAKE_CXX_FLAGS "")
+set(CMAKE_CXX_FLAGS "-D_USE_MATH_DEFINES")
 else ()
 set(CMAKE_CXX_FLAGS "-DDEBUG -g -Wall -O0 -std=c++0x")
 endif()

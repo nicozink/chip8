@@ -37,8 +37,6 @@ struct SystemState
     
     std::array<uint8_t, Globals::MEM_SIZE> memory;
     
-    bool play_sound;
-
     uint16_t program_counter;
     
     std::array<uint8_t, 16> registers;

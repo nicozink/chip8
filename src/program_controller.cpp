@@ -695,6 +695,8 @@ void ProgramController::Opcode_FX33(SystemState& state, uint16_t command)
   state.memory[state.address] = value / 100;
   state.memory[state.address + 1] = value / 10 % 10;
   state.memory[state.address + 2] = value % 10;
+
+  state.program_counter += 2;
 }
 
 // Stores V0 to VX in memory starting at address I.
@@ -702,18 +704,13 @@ void ProgramController::Opcode_FX33(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX55(SystemState& state, uint16_t command)
 {
-  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
-  uint16_t value = state.registers[register_x];
+  uint16_t value = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
 
-  for (int i = 0; i < value; ++i)
+  for (int i = 0; i <= value; ++i)
   {
     uint16_t register_value = state.registers[i];
 
-    uint8_t register_front = BitUtils<uint16_t>::GetHexValue<0xFF00>(register_value);
-    uint8_t register_back = BitUtils<uint16_t>::GetHexValue<0x00FF>(register_value);
-
-    state.memory[state.address + i * 2] = register_front;
-    state.memory[state.address + i * 2 + 1] = register_back;
+    state.memory[state.address + i] = register_value;
   }
 
   state.program_counter += 2;
@@ -724,15 +721,11 @@ void ProgramController::Opcode_FX55(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX65(SystemState& state, uint16_t command)
 {
-  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
-  uint16_t value = state.registers[register_x];
+  uint16_t value = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
 
-  for (int i = 0; i < value; ++i)
+  for (int i = 0; i <= value; ++i)
   {
-    uint8_t memory_front = state.memory[state.address + i * 2];
-    uint8_t memory_back = state.memory[state.address + i * 2 + 1];
-
-    uint16_t memory_value = memory_front << 8 | memory_back;
+    uint16_t memory_value = state.memory[state.address + i];
 
     state.registers[i] = memory_value;
   }
