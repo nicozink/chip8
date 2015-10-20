@@ -24,7 +24,7 @@ class Sound
     Sound();
     ~Sound();
 
-    void GenerateSamples(uint8_t *stream, int length);
+    void GenerateSamples(int16_t *stream, int length);
     void Update(SystemState& state);
 
   private:

@@ -19,13 +19,12 @@ All rights reserved.
 constexpr int AMPLITUDE = 28000;
 constexpr int FREQUENCY = 44100;
 constexpr int BEEP_HZ = 440;
-constexpr int BEEP_DURATION = 1000;
 
 void fill_audio(void *udata, Uint8 *stream, int length)
 {
   Sound* sound = (Sound*)udata;
 
-  sound->GenerateSamples(stream, length);
+  sound->GenerateSamples((int16_t*)stream, length / 2);
 }
 
 Sound::Sound()
@@ -56,7 +55,7 @@ Sound::~Sound()
   SDL_CloseAudio();
 }
 
-void Sound::GenerateSamples(uint8_t *stream, int length)
+void Sound::GenerateSamples(int16_t *stream, int length)
 {
   int i = 0;
 
