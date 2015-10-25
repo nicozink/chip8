@@ -35,6 +35,8 @@ struct SystemState
     
     bool is_running;
     
+    std::bitset<Globals::NUM_KEYS> keyboard;
+
     std::array<uint8_t, Globals::MEM_SIZE> memory;
     
     uint16_t program_counter;

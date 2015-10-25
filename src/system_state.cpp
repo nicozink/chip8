@@ -22,19 +22,17 @@ SystemState::SystemState()
   {
     for (int j = 0; j < Globals::DISPLAY_COLUMNS; ++j)
     {
-      if ((i + j % 2) % 2 == 0)
-      {
-        display[GetDisplayIndex(i, j)] = true;
-      }
-      else
-      {
-        display[GetDisplayIndex(i, j)] = false;
-      }
+      display[GetDisplayIndex(i, j)] = false;
     }
   }
   
   is_running = true;
   
+  for (int i = 0; i < Globals::NUM_KEYS; ++i)
+  {
+    keyboard[i] = false;
+  }
+
   std::for_each(memory.begin(), memory.end(), [](uint8_t &byte)
   {
     byte = 0;

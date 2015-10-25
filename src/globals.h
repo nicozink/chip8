@@ -24,6 +24,8 @@ struct Globals
     static constexpr int FONT_OFFSET = 0;
     
     static constexpr int FONT_SIZE = 5;
+
+    static constexpr int NUM_KEYS = 16;
     
     static constexpr int NUM_PIXELS = DISPLAY_ROWS * DISPLAY_COLUMNS;
     

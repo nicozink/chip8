@@ -566,18 +566,19 @@ void ProgramController::Opcode_DXYN(SystemState& state, uint16_t command)
   
   state.registers[0xF] = 0;
   
-  for (int r = value_y; r < value_y + value_n; r++)
+  for (int i = 0; i < value_n; i++)
   {
-    uint8_t row = state.memory[state.address + r];
-    
-    state.registers[0xF] |= UpdateDisplayBit<0b10000000>(state, r, value_x, row);
-    state.registers[0xF] |= UpdateDisplayBit<0b01000000>(state, r, value_x + 1, row);
-    state.registers[0xF] |= UpdateDisplayBit<0b00100000>(state, r, value_x + 2, row);
-    state.registers[0xF] |= UpdateDisplayBit<0b00010000>(state, r, value_x + 3, row);
-    state.registers[0xF] |= UpdateDisplayBit<0b00001000>(state, r, value_x + 4, row);
-    state.registers[0xF] |= UpdateDisplayBit<0b00000100>(state, r, value_x + 5, row);
-    state.registers[0xF] |= UpdateDisplayBit<0b00000010>(state, r, value_x + 6, row);
-    state.registers[0xF] |= UpdateDisplayBit<0b00000001>(state, r, value_x + 7, row);
+    uint8_t row_data = state.memory[state.address + i];
+    int display_row = value_y + i;
+
+    state.registers[0xF] |= UpdateDisplayBit<0b10000000>(state, display_row, value_x, row_data);
+    state.registers[0xF] |= UpdateDisplayBit<0b01000000>(state, display_row, value_x + 1, row_data);
+    state.registers[0xF] |= UpdateDisplayBit<0b00100000>(state, display_row, value_x + 2, row_data);
+    state.registers[0xF] |= UpdateDisplayBit<0b00010000>(state, display_row, value_x + 3, row_data);
+    state.registers[0xF] |= UpdateDisplayBit<0b00001000>(state, display_row, value_x + 4, row_data);
+    state.registers[0xF] |= UpdateDisplayBit<0b00000100>(state, display_row, value_x + 5, row_data);
+    state.registers[0xF] |= UpdateDisplayBit<0b00000010>(state, display_row, value_x + 6, row_data);
+    state.registers[0xF] |= UpdateDisplayBit<0b00000001>(state, display_row, value_x + 7, row_data);
   }
 
   state.program_counter += 2;
@@ -588,8 +589,18 @@ void ProgramController::Opcode_DXYN(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_EX9E(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+
+  uint32_t value = state.registers[register_x];
+
+  if (state.keyboard[value])
+  {
+    state.program_counter += 4;
+  }
+  else
+  {
+    state.program_counter += 2;
+  }
 }
 
 // Skips the next instruction if the key stored in VX isn't pressed.
@@ -597,8 +608,18 @@ void ProgramController::Opcode_EX9E(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_EXA1(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+
+  uint32_t value = state.registers[register_x];
+
+  if (!state.keyboard[value])
+  {
+    state.program_counter += 4;
+  }
+  else
+  {
+    state.program_counter += 2;
+  }
 }
 
 // Sets VX to the value of the delay timer.
@@ -618,8 +639,17 @@ void ProgramController::Opcode_FX07(SystemState& state, uint16_t command)
 // @param command The current opcode.
 void ProgramController::Opcode_FX0A(SystemState& state, uint16_t command)
 {
-  std::cout << "Opcode " << std::hex << command << " not implemented." << std::endl;
-  exit(0);
+  for (int i = 0; i < Globals::NUM_KEYS; ++i)
+  {
+    if (state.keyboard[i])
+    {
+      uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
+
+      state.registers[register_x] = i;
+
+      state.program_counter += 2;
+    }
+  }
 }
 
 // Sets the delay timer to VX.
