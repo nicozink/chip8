@@ -7,10 +7,12 @@ All rights reserved.
 #define RENDERER_H
 
 // Local Includes
+#include "Globals.h"
 
 // Project Includes
 
 // External Includes
+#include <array>
 
 // Required classes
 class SystemState;
@@ -26,13 +28,13 @@ class Renderer
     
   private:
   
-    void CheckGLError();
-    
     double GetScreenX(int c);
     
     double GetScreenY(int r);
     
     void DrawQuad(int r, int c);
+
+    std::array<uint8_t, Globals::NUM_PIXELS> texture;
 };
 
 #endif

@@ -48,8 +48,11 @@ int run(std::string rom_location)
     input.Process(state);
     timers.Count(state);
 
-    controller.Step(state);
-    
+    for (int i = 0; i < 10; ++i)
+    {
+      controller.Step(state);
+    }
+
     sound.Update(state);
     display.Refresh(state);
   }

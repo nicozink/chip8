@@ -45,9 +45,9 @@ endif (MSVC)
 
 # Set user specified flags.
 if (MSVC)
-set(CMAKE_CXX_FLAGS "-D_USE_MATH_DEFINES")
+set(CMAKE_CXX_FLAGS "-DGLEW_STATIC -D_USE_MATH_DEFINES")
 else ()
-set(CMAKE_CXX_FLAGS "-DDEBUG -g -Wall -O0 -std=c++0x")
+set(CMAKE_CXX_FLAGS "-DGLEW_STATIC -D_USE_MATH_DEFINES -DDEBUG -g -Wall -O0 -std=c++0x")
 endif()
 
 set(SRC_MAIN
@@ -64,6 +64,10 @@ set(SRC_MAIN
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system_state.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/timers.cpp
+)
+
+set(SRC_GLEW
+  ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glew-1.10.0/glew.cpp
 )
 
 if (${OPERATING_SYSTEM} EQUAL ${WINDOWS_ENUM})
@@ -103,13 +107,16 @@ configure_file (
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glew-1.10.0/include)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+add_library(LIB_GLEW ${SRC_GLEW})
+
 ADD_EXECUTABLE(
   chip8
   ${SRC_MAIN})
   
-TARGET_LINK_LIBRARIES(chip8 SDL ${OPENGL_LIBRARIES})
+TARGET_LINK_LIBRARIES(chip8 SDL LIB_GLEW ${OPENGL_LIBRARIES})

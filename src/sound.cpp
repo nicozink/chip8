@@ -19,6 +19,7 @@ All rights reserved.
 constexpr int AMPLITUDE = 28000;
 constexpr int FREQUENCY = 44100;
 constexpr int BEEP_HZ = 440;
+constexpr double PI = 3.14159265358979323846;
 
 void fill_audio(void *udata, Uint8 *stream, int length)
 {
@@ -62,7 +63,7 @@ void Sound::GenerateSamples(int16_t *stream, int length)
   int samples_to_generate = std::min(beep_samples_left, length);
 
   while (i < samples_to_generate) {
-    stream[i] = AMPLITUDE * std::sin(beep_current_v * 2 * M_PI / FREQUENCY);
+    stream[i] = AMPLITUDE * std::sin(beep_current_v * 2 * PI / FREQUENCY);
     beep_current_v += BEEP_HZ;
 
     i++;

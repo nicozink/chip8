@@ -6,6 +6,7 @@ All rights reserved.
 #include "display.h" 
 
 // Local Includes
+#include "renderer.h"
 #include "system_state.h"
 
 // Project Includes
@@ -16,7 +17,6 @@ All rights reserved.
 #include <SDL/SDL.h>
 
 Display::Display()
-: renderer()
 {
   std::cout << "Initialising SDL" << std::endl;
 
@@ -69,11 +69,18 @@ Display::Display()
 
   // Name the OpenGL window.
   SDL_WM_SetCaption("Chip 8", "Chip 8");
+
+  renderer = new Renderer();
+}
+
+Display::~Display()
+{
+  delete renderer;
 }
 
 void Display::Refresh(const SystemState& state)
 {
-  renderer.DrawScreen(state);
+  renderer->DrawScreen(state);
   
   SDL_GL_SwapBuffers();
 }
