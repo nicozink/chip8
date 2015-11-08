@@ -401,9 +401,9 @@ void ProgramController::Opcode_8XY4(SystemState& state, uint16_t command)
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
   uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
 
-  uint32_t result = state.registers[register_x] + state.registers[register_y];
+  uint16_t result = (uint16_t)state.registers[register_x] + (uint16_t)state.registers[register_y];
 
-  if (result & 0xFFFF0000)
+  if (result & 0xFF00)
   {
     state.registers[0xF] = 1;
   }
@@ -412,7 +412,7 @@ void ProgramController::Opcode_8XY4(SystemState& state, uint16_t command)
     state.registers[0xF] = 0;
   }
 
-  state.registers[register_x] = result & 0x0000FFFF;
+  state.registers[register_x] = result & 0x00FF;
 
   state.program_counter += 2;
 }
@@ -425,9 +425,9 @@ void ProgramController::Opcode_8XY5(SystemState& state, uint16_t command)
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
   uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
 
-  uint32_t result = state.registers[register_x] - state.registers[register_y];
+  uint16_t result = (uint16_t)state.registers[register_x] - (uint16_t)state.registers[register_y];
 
-  if (result & 0xFFFF0000)
+  if (result & 0xFF00)
   {
     state.registers[0xF] = 0;
   }
@@ -436,7 +436,7 @@ void ProgramController::Opcode_8XY5(SystemState& state, uint16_t command)
     state.registers[0xF] = 1;
   }
 
-  state.registers[register_x] = result & 0x0000FFFF;
+  state.registers[register_x] = result & 0x00FF;
 
   state.program_counter += 2;
 }
@@ -447,9 +447,9 @@ void ProgramController::Opcode_8XY5(SystemState& state, uint16_t command)
 void ProgramController::Opcode_8XY6(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
-  uint16_t value = state.registers[register_x];
+  uint8_t value = state.registers[register_x];
 
-  state.registers[0xF] = BitUtils<uint16_t>::GetBitValue<0b0000000000000001>(command);
+  state.registers[0xF] = BitUtils<uint8_t>::GetBitValue<0b00000001>(value);
 
   state.registers[register_x] = value >> 1;
 
@@ -464,9 +464,9 @@ void ProgramController::Opcode_8XY7(SystemState& state, uint16_t command)
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
   uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
 
-  uint32_t result = state.registers[register_y] - state.registers[register_x];
+  uint16_t result = (uint16_t)state.registers[register_y] - (uint16_t)state.registers[register_x];
 
-  if (result & 0xFFFF0000)
+  if (result & 0xFF00)
   {
     state.registers[0xF] = 0;
   }
@@ -475,7 +475,7 @@ void ProgramController::Opcode_8XY7(SystemState& state, uint16_t command)
     state.registers[0xF] = 1;
   }
 
-  state.registers[register_x] = result & 0x0000FFFF;
+  state.registers[register_x] = result & 0x00FF;
 
   state.program_counter += 2;
 }
@@ -486,9 +486,9 @@ void ProgramController::Opcode_8XY7(SystemState& state, uint16_t command)
 void ProgramController::Opcode_8XYE(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
-  uint16_t value = state.registers[register_x];
+  uint8_t value = state.registers[register_x];
 
-  state.registers[0xF] = BitUtils<uint16_t>::GetBitValue<0b1000000000000000>(command);
+  state.registers[0xF] = BitUtils<uint8_t>::GetBitValue<0b10000000>(command);
 
   state.registers[register_x] = value << 1;
 
@@ -557,10 +557,10 @@ void ProgramController::Opcode_CXNN(SystemState& state, uint16_t command)
 void ProgramController::Opcode_DXYN(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
-  uint16_t value_x = state.registers[register_x];
+  uint8_t value_x = state.registers[register_x];
   
   uint16_t register_y = BitUtils<uint16_t>::GetHexValue<0x00F0>(command);
-  uint16_t value_y = state.registers[register_y];
+  uint8_t value_y = state.registers[register_y];
   
   uint16_t value_n = BitUtils<uint16_t>::GetHexValue<0x000F>(command);
   
@@ -591,7 +591,7 @@ void ProgramController::Opcode_EX9E(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
 
-  uint32_t value = state.registers[register_x];
+  uint8_t value = state.registers[register_x];
 
   if (state.keyboard[value])
   {
@@ -610,7 +610,7 @@ void ProgramController::Opcode_EXA1(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
 
-  uint32_t value = state.registers[register_x];
+  uint8_t value = state.registers[register_x];
 
   if (!state.keyboard[value])
   {
@@ -646,6 +646,8 @@ void ProgramController::Opcode_FX0A(SystemState& state, uint16_t command)
       uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
 
       state.registers[register_x] = i;
+
+      state.keyboard[i] = false;
 
       state.program_counter += 2;
     }
@@ -683,7 +685,7 @@ void ProgramController::Opcode_FX1E(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
 
-  uint32_t result = state.address + state.registers[register_x];
+  uint32_t result = (uint32_t)state.address + (uint32_t)state.registers[register_x];
 
   if (result & 0xFFFF0000)
   {
@@ -705,9 +707,9 @@ void ProgramController::Opcode_FX1E(SystemState& state, uint16_t command)
 void ProgramController::Opcode_FX29(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
-  uint16_t value = state.registers[register_x];
+  uint8_t value = state.registers[register_x];
   
-  state.address = Globals::FONT_OFFSET + value * Globals::FONT_SIZE;
+  state.address = Globals::FONT_OFFSET + (uint16_t)value * Globals::FONT_SIZE;
 
   state.program_counter += 2;
 }
@@ -720,7 +722,7 @@ void ProgramController::Opcode_FX29(SystemState& state, uint16_t command)
 void ProgramController::Opcode_FX33(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
-  uint16_t value = state.registers[register_x];
+  uint8_t value = state.registers[register_x];
 
   state.memory[state.address] = value / 100;
   state.memory[state.address + 1] = value / 10 % 10;
@@ -738,7 +740,7 @@ void ProgramController::Opcode_FX55(SystemState& state, uint16_t command)
 
   for (int i = 0; i <= value; ++i)
   {
-    uint16_t register_value = state.registers[i];
+    uint8_t register_value = state.registers[i];
 
     state.memory[state.address + i] = register_value;
   }
@@ -755,7 +757,7 @@ void ProgramController::Opcode_FX65(SystemState& state, uint16_t command)
 
   for (int i = 0; i <= value; ++i)
   {
-    uint16_t memory_value = state.memory[state.address + i];
+    uint8_t memory_value = state.memory[state.address + i];
 
     state.registers[i] = memory_value;
   }
