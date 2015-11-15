@@ -16,8 +16,6 @@ SystemState::SystemState()
 {
   address = 0;
   
-  delay_timer = 0;
-  
   for (int i = 0; i < Globals::DISPLAY_ROWS; ++i)
   {
     for (int j = 0; j < Globals::DISPLAY_COLUMNS; ++j)

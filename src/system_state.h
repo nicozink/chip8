@@ -8,6 +8,7 @@ All rights reserved.
 
 // Local Includes
 #include "globals.h"
+#include "timer.h"
 
 // Project Includes
 
@@ -29,7 +30,7 @@ struct SystemState
     
     uint16_t address;
     
-    uint8_t delay_timer;
+    Timer<Globals::TIMER_FREQUENCY> delay_timer;
     
     std::bitset<Globals::NUM_PIXELS> display;
     

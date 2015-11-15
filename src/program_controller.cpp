@@ -629,7 +629,7 @@ void ProgramController::Opcode_FX07(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
 
-  state.registers[register_x] = state.delay_timer;
+  state.registers[register_x] = state.delay_timer.Get();
 
   state.program_counter += 2;
 }
@@ -661,7 +661,7 @@ void ProgramController::Opcode_FX15(SystemState& state, uint16_t command)
 {
   uint16_t register_x = BitUtils<uint16_t>::GetHexValue<0x0F00>(command);
   
-  state.delay_timer = state.registers[register_x];
+  state.delay_timer.Set(state.registers[register_x]);
 
   state.program_counter += 2;
 }

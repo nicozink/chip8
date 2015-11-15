@@ -105,9 +105,9 @@ class ProgramController
     {
       bool value = BitUtils<uint8_t>::GetBitValue<TBitMask>(data);
       
-      if (value)
+      if (value && row < Globals::DISPLAY_ROWS)
       {
-        int i = SystemState::GetDisplayIndex(row % Globals::DISPLAY_ROWS, col % Globals::DISPLAY_COLUMNS);
+        int i = SystemState::GetDisplayIndex(row, col % Globals::DISPLAY_COLUMNS);
 
         state.display[i] = value ^ state.display[i];
 

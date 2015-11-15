@@ -63,7 +63,7 @@ set(SRC_MAIN
   ${CMAKE_CURRENT_SOURCE_DIR}/src/sound.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/system_state.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/timers.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/timer.cpp
 )
 
 set(SRC_GLEW

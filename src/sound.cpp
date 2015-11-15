@@ -84,7 +84,7 @@ void Sound::Update(SystemState& state)
   {
     SDL_LockAudio();
     
-    beep_samples_left = (state.sound_timer * 1000.0 / 60.0) * FREQUENCY / 1000;
+    beep_samples_left = (state.sound_timer * 1000.0 / Globals::TIMER_FREQUENCY) * FREQUENCY / 1000;
     beep_current_v = 0;
 
     SDL_UnlockAudio();
